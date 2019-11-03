@@ -1,11 +1,13 @@
+// Version 1.0 for Autonomous driving 2WD Car (Ultrasound based)
+// Mayra Castellanos
+// 3.11.2019
+
 #include <analogWrite.h>
 
-int inputPin = A6; // ultrasonic module   ECHO to A1
-int outputPin = A7; // ultrasonic module  TRIG to A0
+int inputPin = A6; //ultrasonic module   ECHO to A1
+int outputPin = A7; //ultrasonic module  TRIG to A0
 #define Lpwm_pin  33    //pin of controlling speed---- ENA of motor driver board
 #define Rpwm_pin  32    //pin of controlling speed---- ENB of motor driver board
-//int Lpwm_pin = 33;
-//int Rpwm_pin = 32;
 int pinLB = 13;           //pin of controlling turning---- IN1 of motor driver board
 int pinLF = 12;           //pin of controlling turning---- IN2 of motor driver board
 int pinRB = 14;          //pin of controlling turning---- IN3 of motor driver board
@@ -16,7 +18,7 @@ int Car_state = 0;           //the working state of car
 int servopin = 19;            //defining digital port pin 3, connecting to signal line of servo motor
 int myangle;                //defining variable of angle
 int pulsewidth;              //defining variable of pulse width
-unsigned char DuoJiao = 90;  //initialized angle of motor at 60°
+unsigned char DuoJiao = 90;  //initialized angle of motor at 90°
 
 int angleServoLeft = 35;
 int angleServoStraight = 0;
@@ -90,8 +92,6 @@ void back()         //back up
   digitalWrite(pinLF, HIGH);
   Car_state = 2;
 }
-
-
 
 void Self_Control(void)//self-going, ultrasonic obstacle avoidance
 {
@@ -227,8 +227,8 @@ void setup()
   M_Control_IO_config();     //motor controlling the initialization of IO
   Set_Speed(Lpwm_val, Rpwm_val); //setting initialized speed
   Set_servopulse(DuoJiao);       //setting initialized motor angle
-  pinMode(inputPin, INPUT);      //starting receiving IR remote control signal
-  pinMode(outputPin, OUTPUT);    //IO of ultrasonic module
+  pinMode(inputPin, INPUT);      //starting receiving from ultrasonic module
+  pinMode(outputPin, OUTPUT);    //starting sending to ultrasonic module
   Serial.begin(9600);            //initialized serial port , using Bluetooth as serial port, setting baud
   stopp();                       //stop
 }
