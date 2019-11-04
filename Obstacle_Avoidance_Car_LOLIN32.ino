@@ -1,25 +1,23 @@
-// Version 1.0 for Autonomous driving 2WD Car (Ultrasound based)
-// Mayra Castellanos
-// 3.11.2019
-
 #include <analogWrite.h>
 
-int inputPin = A6; //ultrasonic module   ECHO to A1
-int outputPin = A7; //ultrasonic module  TRIG to A0
-#define Lpwm_pin  33    //pin of controlling speed---- ENA of motor driver board
-#define Rpwm_pin  32    //pin of controlling speed---- ENB of motor driver board
-int pinLB = 13;           //pin of controlling turning---- IN1 of motor driver board
-int pinLF = 12;           //pin of controlling turning---- IN2 of motor driver board
-int pinRB = 14;          //pin of controlling turning---- IN3 of motor driver board
-int pinRF = 27;          //pin of controlling turning---- IN4 of motor driver board
-unsigned char Lpwm_val = 105; //initialized left wheel speed at 250
-unsigned char Rpwm_val = 85; //initialized right wheel speed at 250
+// PIN DEFINITIONS
+#define inputPin 34    // ultrasonic module   ECHO 
+#define outputPin 33  // ultrasonic module  TRIG 
+#define Lpwm_pin 23    //pin of controlling speed---- ENA of motor driver board
+#define Rpwm_pin 19   //pin of controlling speed---- ENB of motor driver board
+#define pinLB 18           //pin of controlling turning---- IN1 of motor driver board
+#define pinLF 5            //pin of controlling turning---- IN2 of motor driver board
+#define pinRB 17          //pin of controlling turning---- IN3 of motor driver board
+#define pinRF 16          //pin of controlling turning---- IN4 of motor driver board
+int servopin = 21;       //pin to signal of servo motor
+
+// VARIABLE DEFINITIONS
+unsigned char Lpwm_val = 200; //initialized left wheel speed at 250
+unsigned char Rpwm_val = 200; //initialized right wheel speed at 250
 int Car_state = 0;           //the working state of car
-int servopin = 19;            //defining digital port pin 3, connecting to signal line of servo motor
 int myangle;                //defining variable of angle
 int pulsewidth;              //defining variable of pulse width
 unsigned char DuoJiao = 90;  //initialized angle of motor at 90°
-
 int angleServoLeft = 35;
 int angleServoStraight = 0;
 int angleServoRight = -35;
@@ -93,6 +91,7 @@ void back()         //back up
   Car_state = 2;
 }
 
+
 void Self_Control(void)//self-going, ultrasonic obstacle avoidance
 {
   int H;
@@ -102,7 +101,7 @@ void Self_Control(void)//self-going, ultrasonic obstacle avoidance
 /*
   H = Ultrasonic_Ranging(1);
   delay(300);
-  
+
   if (H < 35)
   {
     stopp();
@@ -148,7 +147,7 @@ void Self_Control(void)//self-going, ultrasonic obstacle avoidance
       stopp();
       delay(50);
       Set_servopulse(angleServoStraight);
-      // H = Ultrasonic_Ranging(1);
+      H = Ultrasonic_Ranging(1);
       // delay(500);
     }
     else
@@ -161,7 +160,7 @@ void Self_Control(void)//self-going, ultrasonic obstacle avoidance
       stopp();
       delay(50);
       Set_servopulse(angleServoStraight);
-      // H = Ultrasonic_Ranging(1);
+      H = Ultrasonic_Ranging(1);
       // delay(500);
     }
 
@@ -227,8 +226,8 @@ void setup()
   M_Control_IO_config();     //motor controlling the initialization of IO
   Set_Speed(Lpwm_val, Rpwm_val); //setting initialized speed
   Set_servopulse(DuoJiao);       //setting initialized motor angle
-  pinMode(inputPin, INPUT);      //starting receiving from ultrasonic module
-  pinMode(outputPin, OUTPUT);    //starting sending to ultrasonic module
+  pinMode(inputPin, INPUT);      //starting receiving IR remote control signal
+  pinMode(outputPin, OUTPUT);    //IO of ultrasonic module
   Serial.begin(9600);            //initialized serial port , using Bluetooth as serial port, setting baud
   stopp();                       //stop
 }
